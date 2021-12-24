@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">CalculatorX</string>
+    <string name="main_activity__ss2_rb__text">2</string>
+    <string name="main_activity__ss8_rb__text">8</string>
+    <string name="main_activity__ss10_rb__text">10</string>
+    <string name="main_activity__ss16_rb__text">16</string>
+    <string name="main_activity__reset_btn__text">C</string>
+    <string name="main_activity__plus_operation_btn__text">+</string>
+    <string name="main_activity__minus_operation_btn__text">-</string>
+    <string name="main_activity__mult_operation_btn__text">*</string>
+    <string name="main_activity__div_operation_btn__text">/</string>
+    <string name="main_activity__digit7_btn__text">7</string>
+    <string name="main_activity__digit8_btn__text">8</string>
+    <string name="main_activity__digit9_btn__text">9</string>
+    <string name="main_activity__digit4_btn__text">4</string>
+    <string name="main_activity__digit5_btn__text">5</string>
+    <string name="main_activity__digit6_btn__text">6</string>
+    <string name="main_activity__digit1_btn__text">1</string>
+    <string name="main_activity__digit2_btn__text">2</string>
+    <string name="main_activity__digit3_btn__text">3</string>
+    <string name="main_activity__digit0_btn__text">0</string>
+    <string name="main_activity__point_btn__text">,</string>
+    <string name="main_activity__compute_btn__text">Вычислить</string>
+</resources>
