@@ -19,6 +19,7 @@ public class MainActivity extends AppCompatActivity {
     private Button digit8Btn;
     private Button digit9Btn;
     private Button digit0Btn;*/
+
     private Button[] digitsBtn;
     private Button dotBtn;
 
@@ -33,11 +34,84 @@ public class MainActivity extends AppCompatActivity {
 
     private class NumberManager {
         private long value = 0;
+        private boolean firstValueChanged = false;
+        private long value2 = 0;
+        private boolean secondValueChanged = false;
+        private String sign = new String("");
+        private final String plus = new String("+");
+        private final String minus = new String("-");
+        private final String div = new String("/");
+        private final String mult = new String("*");
+
         public void show() {
-            numberFieldTV.setText(String.valueOf(value));
+            if (!secondValueChanged)
+                numberFieldTV.setText(String.valueOf(value) + sign);
+            else
+                numberFieldTV.setText(String.valueOf(value) + sign + String.valueOf(value2));
+
         }
+
+        public void show(long amount) {
+            numberFieldTV.setText(String.valueOf(amount));
+        }
+
+        public void show(String text) {
+            numberFieldTV.setText(text);
+        }
+
+        public void compute() {
+            if (firstValueChanged && secondValueChanged) {
+                long res = 0;
+                if (sign.equals(plus))
+                    res = value + value2;
+                else if (sign.equals(minus))
+                    res = value - value2;
+                else if (sign.equals(div))
+                    if (value2 != 0) {
+                        res = value / value2;
+                    }
+                    else {
+                        number.show("Zero division error");
+                        secondValueChanged = false;
+                        value2 = 0;
+                        value = 0;
+                        return;
+                    }
+                else if (sign.equals(mult))
+                    res = value * value2;
+                number.show(res);
+                secondValueChanged = false;
+                value2 = 0;
+                value = res;
+
+            }
+        }
+
         public void writeDigit(int d) {
-            value = value * 10 + d;
+            if (sign.length() == 0) {
+                value = value * 10 + d;
+                firstValueChanged = true;
+                show();
+            }
+            else {
+                secondValueChanged = true;
+                value2 = value2 * 10 + d;
+                show();
+            }
+        }
+
+        public void writeSign(String d) {
+            if (firstValueChanged)
+                sign = d;
+                show();
+
+        }
+
+
+        public void clear() {
+            value = 0;
+            value2 = 0;
+            sign = new String("");
             show();
         }
     }
@@ -59,17 +133,6 @@ public class MainActivity extends AppCompatActivity {
         digitsBtn[8] = findViewById(R.id.main_activity_digit8_btn);
         digitsBtn[9] = findViewById(R.id.main_activity_digit9_btn);
         digitsBtn[0] = findViewById(R.id.main_activity_digit0_btn);
-
-        /*digit1Btn = findViewById(R.id.main_activity_digit1_btn);
-        digit2Btn = findViewById(R.id.main_activity_digit2_btn);
-        digit3Btn = findViewById(R.id.main_activity_digit3_btn);
-        digit4Btn = findViewById(R.id.main_activity_digit4_btn);
-        digit5Btn = findViewById(R.id.main_activity_digit5_btn);
-        digit6Btn = findViewById(R.id.main_activity_digit6_btn);
-        digit7Btn = findViewById(R.id.main_activity_digit7_btn);
-        digit8Btn = findViewById(R.id.main_activity_digit8_btn);
-        digit9Btn = findViewById(R.id.main_activity_digit9_btn);
-        digit0Btn = findViewById(R.id.main_activity_digit0_btn);*/
 
         dotBtn = findViewById(R.id.main_activity_dot_btn);
         plusBtn = findViewById(R.id.main_activity_plus_operation_btn);
@@ -93,8 +156,43 @@ public class MainActivity extends AppCompatActivity {
                 number.writeDigit(digit);
             }
         }
+
+        class ArithmeticOperations implements View.OnClickListener {
+            private final String sign;
+
+            public ArithmeticOperations(String sign) {
+                this.sign = sign;
+            }
+
+            @Override
+            public void onClick(View v) {
+                number.writeSign(sign);
+            }
+        }
+
         for (int i = 0; i < digitsBtn.length; i++)
             digitsBtn[i].setOnClickListener(new NumberInputClickListener(i));
+
+        // чистим поле при нажатии на C
+        resetBtn.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                number.clear();
+            }
+        });
+
+        divBtn.setOnClickListener(new ArithmeticOperations(String.valueOf(divBtn.getText())));
+        plusBtn.setOnClickListener(new ArithmeticOperations(String.valueOf(plusBtn.getText())));
+        minusBtn.setOnClickListener(new ArithmeticOperations(String.valueOf(minusBtn.getText())));
+        multBtn.setOnClickListener(new ArithmeticOperations(String.valueOf(multBtn.getText())));
+
+        computeBtn.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                number.compute();
+            }
+        });
+
 
         /*digit1Btn.setOnClickListener(new NumberInputClickListener(1));
         digit2Btn.setOnClickListener(new NumberInputClickListener(2));*/
